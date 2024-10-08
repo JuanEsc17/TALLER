@@ -1,0 +1,91 @@
+programa ciudadDeLaPaz
+procesos
+  proceso agarrarFlores(ES flores:numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  areaC: AreaPC(2,2,10,10)
+  areaJ:AreaP(1,1,1,1)
+  area1:AreaP(2,1,2,1)
+  area2:AreaP(3,1,3,1)
+  area3:AreaP(4,1,4,1)
+  area4:AreaP(5,1,5,1)
+robots
+  robot recolector
+  variables
+    flores,id,av,ca,a,c:numero
+    aux:boolean
+  comenzar
+    flores:=0
+    id:=PosAv
+    aux:=V
+    ca:=PosCa
+    RecibirMensaje(a,rJ)
+    RecibirMensaje(c,rJ)
+    mientras aux=V
+      BloquearEsquina(a,c)
+      Pos(a,c)
+      si HayFlorEnLaEsquina
+        agarrarFlores(flores)
+      sino
+        aux:=F
+      Pos(id,ca)
+      LiberarEsquina(a,c)
+    EnviarMensaje(id,rJ)
+    EnviarMensaje(flores,rJ)
+  fin
+  robot jefe
+  variables
+    maxId,maxF,id,f:numero
+    randomAv,randomCa:numero
+  comenzar
+    Random(randomAv,2,10)
+    Random(randomCa,2,10)
+    EnviarMensaje(randomAv,r1)
+    EnviarMensaje(randomCa,r1)
+    EnviarMensaje(randomAv,r2)
+    EnviarMensaje(randomCa,r2)
+    EnviarMensaje(randomAv,r3)
+    EnviarMensaje(randomCa,r3)
+    EnviarMensaje(randomAv,r4)
+    EnviarMensaje(randomCa,r4)
+    maxF:=-1
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=2
+        RecibirMensaje(f,r1)
+      sino
+        si id=3
+          RecibirMensaje(f,r2)
+        sino
+          si id=4
+            RecibirMensaje(f,r3)
+          sino
+            RecibirMensaje(f,r4)  
+      si (f>maxF)
+        maxF:=f
+        maxId:=id
+    Informar(maxId)
+  fin
+variables
+  r1,r2,r3,r4:recolector
+  rJ:jefe
+comenzar
+  AsignarArea(r1,areaC)
+  AsignarArea(r2,areaC)
+  AsignarArea(r3,areaC)
+  AsignarArea(r4,areaC)
+  AsignarArea(rJ,areaJ)
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(r4,area4)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(r3,4,1)
+  Iniciar(r4,5,1)
+  Iniciar(rJ,1,1)
+fin

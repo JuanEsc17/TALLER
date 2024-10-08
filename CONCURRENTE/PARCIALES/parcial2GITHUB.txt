@@ -1,0 +1,109 @@
+programa legendario
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+  fin
+  proceso recorrerAvenidaF(ES f:numero)
+  comenzar
+    repetir 9
+      juntarFlores(f)
+      mover
+    juntarFlores(f)
+  fin 
+  proceso recorrerAvenidaP
+  comenzar
+    repetir 9
+      juntarPapeles
+      mover
+    juntarPapeles
+  fin
+areas
+  a1:AreaP(5,1,5,10)
+  a2:AreaP(6,1,6,10)
+  a3:AreaP(7,1,7,10)
+  ac:AreaP(1,1,1,1)
+robots
+  robot recolector
+  variables
+    id,f:numero
+    sigo:boolean
+  comenzar
+    f:=0
+    RecibirMensaje(id,coord)
+    recorrerAvenidaF(f)
+    EnviarMensaje(id,coord)
+    EnviarMensaje(f,coord)
+    RecibirMensaje(sigo,coord)
+    si sigo
+      Pos(PosAv,1)
+      recorrerAvenidaP
+      EnviarMensaje(id,coord)
+  fin
+  robot coordinador
+  variables
+    fMax1,fMax2,f,id1,id2,id:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    fMax1:=-1
+    id1:=0
+    repetir 3
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(f,r1)
+      sino
+        si id=2
+          RecibirMensaje(f,r2)
+        sino
+          RecibirMensaje(f,r3)
+      si f>=fMax1
+        fMax2:=fMax1
+        id2:=id1
+        fMax1:=f
+        id1:=id
+      sino
+        si f>=fMax2
+          fMax2:=f
+          id2:=2
+    si (((id1=1)&(id2=2))|((id1=2)&(id2=1)))
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(F,r3)
+    sino
+      si (((id1=2)&(id2=3))|((id1=3)&(id2=2)))
+        EnviarMensaje(F,r1)
+        EnviarMensaje(V,r2)
+        EnviarMensaje(V,r3)
+      sino
+        si(((id1=1)&(id2=3))|((id1=3)&(id2=1)))
+          EnviarMensaje(V,r1)
+          EnviarMensaje(F,r2)
+          EnviarMensaje(V,r3)
+    RecibirMensaje(id,*)
+    Informar(id)
+    RecibirMensaje(id,*)
+  fin
+variables
+  r1,r2,r3:recolector
+  coord:coordinador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(coord,ac)
+  Iniciar(r1,5,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,7,1)
+  Iniciar(coord,1,1)  
+fin 
+  
+  

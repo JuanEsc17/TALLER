@@ -1,0 +1,72 @@
+programa ej1Prac2
+procesos
+  proceso recorrer(ES flores:numero)
+  comenzar
+    flores:=0
+    repetir 9
+      AgarrarFlores(flores)
+      mover
+    AgarrarFlores(flores)
+  fin
+  proceso AgarrarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(2,1,2,1)
+robots
+  robot robJuntador
+  variables
+    flores:numero
+    quienSoy:numero
+    informar:numero
+  comenzar
+    RecibirMensaje(quienSoy,robJefe)
+    recorrer(flores)
+    EnviarMensaje(quienSoy,robJefe)
+    EnviarMensaje(flores,robJefe)
+  fin
+  robot robJefe
+  variables
+    quienEs:numero
+    maxRob:numero
+    maxFlores:numero
+    auxFlores:numero
+    auxFlores2:numero
+  comenzar
+    EnviarMensaje(1,robJun1)
+    EnviarMensaje(2,robJun2)
+    maxFlores:=-1
+    repetir 2
+      RecibirMensaje(quienEs,*)
+      si(quienEs=1)
+        RecibirMensaje(auxFlores,robJun1)
+        si(auxFlores>maxFlores)
+          maxFlores:=auxFlores
+          maxRob:=1
+      sino
+        RecibirMensaje(auxFlores2,robJun2)
+        si(auxFlores2>maxFlores)
+          maxFlores:=auxFlores
+          maxRob:=2
+    si maxRob=1
+      Informar(auxFlores-auxFlores2)
+    sino
+      Informar(auxFlores2-auxFlores)
+  fin  
+variables
+  robJun1:robJuntador
+  robJun2:robJuntador
+  robJefe:robJefe
+comenzar
+  AsignarArea(robJun1,area1)
+  AsignarArea(robJun2,area2)
+  AsignarArea(robJefe,area3)
+  Iniciar(robJun1,1,1)
+  Iniciar(robJun2,2,11)
+  Iniciar(robJefe,2,1)
+fin

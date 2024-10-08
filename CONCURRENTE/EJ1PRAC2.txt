@@ -1,0 +1,58 @@
+programa ej1Prac2
+procesos
+  proceso recorrer(ES flores:numero)
+  comenzar
+    flores:=0
+    repetir 9
+      AgarrrarFlores(flores)
+      mover
+    AgarrarFlores(flores)
+  fin
+  proceso AgarrarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  
+robots
+  robot robJuntador
+  variables
+    flores:numero
+    quienSoy:numero
+  comenzar
+    RecibirMensaje(quienSoy,robJefe)
+    recorrer(flores)
+    EnviarMensaje(quienSoy,robJefe)
+    EnviarMensaje(flores,robJefe)
+  fin
+  robot robJefe
+  variables
+    quienEs:numero
+    maxRob:numero
+    maxFlores:numero
+    auxFlores:numero
+  comenzar
+    EnviarMensaje(1,robJun1)
+    EnviarMensaje(2,robJun2)
+    maxFlores:=-1
+    repetir 2
+      RecibirMensaje(quienEs,*)
+      si(quienEs=1)
+        RecibirMensaje(auxFlores,robJun1)
+        si(auxFlores>maxFlores)
+          maxFlores:=auxFlores
+          maxRob:=1
+      sino
+        RecibirMensaje(auxFlores,robJun2)
+        si(auxFlores>maxFlores)
+          maxFlores:=auxFlores
+          maxRob:=2
+  fin  
+variables
+
+comenzar
+  AsignarArea()
+  Iniciar()
+fin

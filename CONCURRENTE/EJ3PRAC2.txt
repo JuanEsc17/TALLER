@@ -1,0 +1,83 @@
+programa ilomilo
+procesos
+  proceso agarrarPapeles(ES fp:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      fp:=fp+1
+  fin
+  proceso agarrarFlores(ES fp:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      fp:=fp+1
+  fin
+
+  proceso recorrerCalleA(ES fp:numero)
+  comenzar
+    derecha
+    agarrarPapeles(fp)
+    repetir 9
+      mover
+      agarrarPapeles(fp)
+  fin
+  proceso recorrerCalleB(ES fp:numero)
+  comenzar
+    derecha
+    agarrarFlores(fp)
+    repetir 9
+      mover
+      agarrarFlores(fp)
+  fin
+
+areas
+  AreaA:AreaPC(1,1,20,1)
+  AreaB:AreaPC(1,5,20,5)
+robots
+  robot A1
+  variables
+    p:numero
+  comenzar
+    p:=0
+    recorrerCalleA(p)
+    EnviarMensaje(p,A2)
+  fin
+  robot A2
+  variables
+    p:numero
+  comenzar
+    RecibirMensaje(p,A1)
+    recorrerCalleA(p)
+    Informar(p)
+  fin
+  robot B1
+  variables
+    f:numero
+  comenzar
+    f:=0
+    recorrerCalleB(f)
+    EnviarMensaje(f,B2)
+  fin
+  robot B2
+  variables
+    f:numero
+  comenzar
+    RecibirMensaje(f,B1)
+    recorrerCalleB(f)
+    Informar(f)
+  fin
+variables
+  A1:A1
+  A2:A2
+  B1:B1
+  B2:B2
+comenzar
+  AsignarArea(A1,AreaA)
+  AsignarArea(A2,AreaA)
+  AsignarArea(B1,AreaB)
+  AsignarArea(B2,AreaB)
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)
+fin

@@ -1,0 +1,103 @@
+programa corleone
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso cuadrado(ES l:numero ES f:numero)
+  comenzar
+    repetir 4
+      repetir l
+        juntarFlores(f)
+        mover
+      derecha
+  fin
+  proceso depositarFlores(E f:numero)
+  variables
+    ca:numero
+    av:numero
+  comenzar
+    ca:=PosCa
+    av:=PosAv
+    repetir f
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(50,50)
+  fin
+areas
+  area1: AreaP(1,1,7,26)
+  area2: AreaP(10,1,16,26)
+  area3: AreaP(20,1,26,26)
+  areaC: AreaP(100,100,100,100)
+  areaDep:AreaC(50,50,50,50)
+robots
+  robot cuad
+  variables
+    id,f,l:numero
+  comenzar
+    RecibirMensaje(id,cord)
+    repetir 3
+      RecibirMensaje(l,cord)
+      cuadrado(l,f)
+      Pos(PosAv,PosCa+6)
+    depositarFlores(f)
+    EnviarMensaje(id,cord)
+    EnviarMensaje(f,cord)
+  fin
+  robot coordinador
+  variables
+    id,idMax,f,fMax,lado,fTotal:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 3
+      Random(lado,1,6)
+      EnviarMensaje(lado,r1)
+      EnviarMensaje(lado,r2)
+      EnviarMensaje(lado,r3)
+    fMax:=-1
+    fTotal:=0
+    repetir 3
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(f,r1)
+      sino
+        si id=2
+          RecibirMensaje(f,r2)
+        sino
+          RecibirMensaje(f,r3)
+      fTotal:=fTotal+f
+      si(f>fMax)
+        fMax:=f
+        idMax:=id
+    Pos(50,50)
+    repetir fTotal
+      tomarFlor
+    Pos(100,100)
+    Informar(idMax)
+  fin
+variables
+  r1,r2,r3:cuad
+  cord:coordinador
+comenzar
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(r1,areaDep)
+  AsignarArea(r2,areaDep)
+  AsignarArea(r3,areaDep)
+  AsignarArea(cord,areaC)
+  AsignarArea(cord,areaDep)
+  Iniciar(r1,1,1)
+  Iniciar(r2,10,1)
+  Iniciar(r3,20,1)
+  Iniciar(cord,100,100)
+fin    
+      
+      
+      

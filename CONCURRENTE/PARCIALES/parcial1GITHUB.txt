@@ -1,0 +1,114 @@
+programa ziggyStardust
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin  
+  proceso recorroFlor(ES f:numero)
+  comenzar
+    repetir 4
+      juntarFlores(f)
+      mover
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    juntarFlores(f)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir 4
+      juntarFlores(f)
+      mover
+  fin
+  proceso recorroPapel(ES p:numero)
+  comenzar
+    repetir 7
+      juntarPapeles(p)
+      mover
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    juntarPapeles(p)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    repetir 11
+      juntarPapeles(p)
+      mover
+  fin
+areas
+  avAzul: AreaPC(7,4,7,24)
+  caAzul: AreaPC(2,12,12,12)
+  avVerde: AreaPC(21,4,21,24)
+  caVerde: AreaPC(16,12,26,12)
+  areaF: AreaP(1,1,1,1)
+robots
+  robot florero
+  variables
+    id,f,total:numero
+  comenzar
+    id:=PosAv
+    derecha
+    f:=0
+    total:=0
+    recorroFlor(f)
+    si id=2
+      RecibirMensaje(total,avA) 
+    si id=26
+      RecibirMensaje(total,avV)
+    total:=total+f 
+    EnviarMensaje(id,rF)
+    EnviarMensaje(total,rF)
+  fin
+  robot papelero
+  variables
+    id,p:numero
+  comenzar
+    id:=PosAv
+    p:=0
+    recorroPapel(p)
+    si id=7
+      EnviarMensaje(p,caA)
+    sino
+      EnviarMensaje(p,caV)
+  fin
+  robot fiscalizador
+  variables
+    id,totalA,totalV:numero
+  comenzar
+    repetir 2
+      RecibirMensaje(id,*)
+      si id=2
+        RecibirMensaje(totalA,caA)
+      sino
+        RecibirMensaje(totalV,caV)
+    si totalA>totalV
+      Informar(1)
+    sino
+      Informar(2)
+  fin
+variables
+  avA,avV:papelero
+  caA,caV:florero
+  rF:fiscalizador
+comenzar
+  AsignarArea(avA,avAzul)
+  AsignarArea(avA,caAzul)
+  AsignarArea(caA,caAzul)
+  AsignarArea(caA,avAzul)
+  AsignarArea(avV,avVerde)
+  AsignarArea(avV,caVerde)
+  AsignarArea(caV,caVerde)
+  AsignarArea(caV,avVerde)
+  AsignarArea(rF,areaF)
+  Iniciar(caA,2,12)
+  Iniciar(avA,7,4)
+  Iniciar(caV,16,12)
+  Iniciar(avV,21,4)
+  Iniciar(rF,1,1)
+fin
+fin

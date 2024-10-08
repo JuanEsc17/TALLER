@@ -1,0 +1,76 @@
+programa yourPower
+procesos
+  proceso papelesFlores(ES f:numero ES p:numero ES cant:numero)
+  comenzar
+    si(f>p)
+      cant:=cant+1
+    p:=0
+    f:=0
+  fin
+  proceso agarrar(ES f:numero ES p:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso escalera(ES cant:numero)
+  variables
+    alto:numero
+    p,f:numero
+  comenzar
+    p:=0
+    f:=0
+    Random(alto,1,5)
+    repetir 4
+      repetir alto
+        agarrar(f,p)
+        mover
+      agarrar(f,p)
+      derecha
+      mover
+      agarrar(f,p)
+      papelesFlores(f,p,cant)
+      repetir 3
+        derecha
+  fin
+areas
+  area1:AreaPC(2,1,30,30)
+  areaJ:AreaP(1,1,1,1)
+robots
+  robot robEsc
+  variables
+    floresPapeles:numero
+  comenzar
+    floresPapeles:=0
+    escalera(floresPapeles)
+    EnviarMensaje(floresPapeles,robJefe)
+  fin
+  robot robJefe
+  variables
+    total:numero
+    aux:numero
+  comenzar
+    total:=0
+    repetir 3
+      RecibirMensaje(aux,*)
+      total:=aux+total
+    Informar(total)
+  fin
+variables
+  rob1:robEsc
+  rob2:robEsc
+  rob3:robEsc
+  robJefe:robJefe
+comenzar
+  AsignarArea(rob1,area1)
+  AsignarArea(rob2,area1)
+  AsignarArea(rob3,area1)
+  AsignarArea(robJefe,areaJ)
+  Iniciar(rob1,2,1)
+  Iniciar(rob2,7,1)
+  Iniciar(rob3,12,1)
+  Iniciar(robJefe,1,1)
+fin

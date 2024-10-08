@@ -1,0 +1,115 @@
+programa KAWA
+procesos
+  proceso irEsquinaF(ES flores:numero)
+  variables
+    avAleatoria:numero
+    caAleatoria:numero
+    avInicial:numero
+    caInicial:numero
+  comenzar
+    Random(avAleatoria,1,5)
+    Random(caAleatoria,1,10)
+    avInicial:=PosAv
+    caInicial:=PosCa
+    BloquearEsquina(avAleatoria,caAleatoria)
+    Pos(avAleatoria,caAleatoria)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+    Pos(avInicial,caInicial)
+    LiberarEsquina(avAleatoria,caAleatoria)
+  fin
+  proceso irEsquinaP(ES papeles:numero)
+  variables
+    avAleatoria:numero
+    caAleatoria:numero
+    avInicial:numero
+    caInicial:numero
+  comenzar
+    Random(avAleatoria,6,10)
+    Random(caAleatoria,1,9)
+    avInicial:=PosAv
+    caInicial:=PosCa
+    BloquearEsquina(avAleatoria,caAleatoria)
+    Pos(avAleatoria,caAleatoria)
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:=papeles+1
+    Pos(avInicial,caInicial)
+    LiberarEsquina(avAleatoria,caAleatoria)
+  fin
+  proceso depositarFlores
+  variables
+    av:numero
+    ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    mientras HayFlorEnLaBolsa
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+  proceso depositarPapeles
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    mientras HayPapelEnLaBolsa
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarPapel
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+areas
+  AreaFl:AreaPC(1,1,5,10)
+  AreaPa:AreaPC(6,1,10,9)
+  Area1:AreaP(6,10,6,10)
+  Area2:AreaP(7,10,7,10)
+  Area3:AreaP(8,10,8,10)
+  Area4:AreaP(9,10,9,10)
+  D:AreaP(10,10,10,10)
+robots
+  robot florero
+  variables
+    flores:numero
+  comenzar
+    flores:=0
+    repetir 5
+      irEsquinaF(flores)
+    depositarFlores
+  fin
+  robot papelero
+  variables
+    papeles:numero
+  comenzar
+    papeles:=0
+    repetir 3
+      irEsquinaP(papeles)
+    depositarPapeles
+  fin
+variables
+  F1,F2:florero
+  P1,P2:papelero
+comenzar
+  AsignarArea(F1,AreaFl)
+  AsignarArea(F1,Area1)
+  AsignarArea(F2,AreaFl)
+  AsignarArea(F2,Area2)
+  AsignarArea(P1,AreaPa)
+  AsignarArea(P1,Area3)
+  AsignarArea(P2,AreaPa)
+  AsignarArea(P2,Area4)
+  AsignarArea(F1,D)
+  AsignarArea(F2,D)
+  AsignarArea(P1,D)
+  AsignarArea(P2,D)
+  Iniciar(F1,6,10)
+  Iniciar(F2,7,10)
+  Iniciar(P1,8,10)
+  Iniciar(P2,9,10)
+fin

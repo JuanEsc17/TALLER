@@ -1,0 +1,94 @@
+programa namore
+procesos
+  proceso juntarFlor(ES flores:numero ES hay:boolean)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    si HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+    sino
+      hay:=F
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+  fin
+  proceso juntarPapel(ES papeles:numero ES hay:boolean)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    si HayPapelEnLaEsquina
+      tomarPapel
+      papeles:=papeles+1
+    sino
+      hay:=F
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+  fin
+  proceso recorrer(E o:numero)
+  comenzar
+    Pos(1,5)
+    derecha
+    repetir o
+      mover
+  fin
+areas
+  Area1: AreaP(2,2,2,2)
+  Area2: AreaP(3,3,3,3)
+  AreaD: AreaC(50,50,50,50)
+  Calle5: AreaC(1,5,100,5)
+robots
+  robot papeles
+  variables
+    p:numero
+    f:numero
+    hay:boolean
+  comenzar
+    p:=0
+    hay:=V
+    mientras hay
+      juntarPapel(p,hay)
+    RecibirMensaje(f,r1)
+    si f>p
+      EnviarMensaje(V,r1)
+    sino
+      EnviarMensaje(F,r1)
+      Informar(p)
+      recorrer(p)
+  fin
+  robot flores
+  variables
+    f:numero
+    hay:boolean
+    voy:boolean
+  comenzar
+    f:=0
+    hay:=V
+    mientras hay
+      juntarFlor(f,hay)
+    EnviarMensaje(f,r2)
+    RecibirMensaje(voy,r2)
+    si voy=V
+      Informar(f)
+      recorrer(f)
+  fin
+variables
+  r1:flores
+  r2:papeles
+comenzar
+  AsignarArea(r1,Area1)
+  AsignarArea(r1,AreaD)
+  AsignarArea(r1,Calle5)
+  AsignarArea(r2,Area2)
+  AsignarArea(r2,AreaD)
+  AsignarArea(r2,Calle5)
+  Iniciar(r1,2,2)
+  Iniciar(r2,3,3)
+fin

@@ -1,0 +1,95 @@
+programa fue
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso etapa(ES f:numero)
+  comenzar
+    f:=0
+    repetir 10
+      juntarFlores(f)
+      mover
+  fin
+  proceso depositarFlores(E f:numero)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir f
+      depositarFlor
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+  fin
+areas
+  av1:AreaP(1,1,101,1)
+  av2:AreaP(1,2,101,2)
+  av3:AreaP(1,3,101,3)
+  dep:AreaC(50,50,50,50)
+  rec:AreaP(1,4,1,4)
+robots
+  robot juntador
+  variables
+    f,id,listo:numero
+  comenzar
+    derecha
+    id:=PosCa
+    repetir 9
+      etapa(f)
+      depositarFlores(f)
+      si(id=1)
+        EnviarMensaje(V,r2)
+        EnviarMensaje(V,r3)
+        RecibirMensaje(listo,r2)
+        RecibirMensaje(listo,r3)
+      sino
+        si(id=2)
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r3)
+          RecibirMensaje(listo,r1)
+          RecibirMensaje(listo,r3)
+        sino
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r2)
+          RecibirMensaje(listo,r1)
+          RecibirMensaje(listo,r2)
+    EnviarMensaje(listo,rF)  
+  fin
+  robot fiscal
+  variables
+    fTotal:numero
+    listo:boolean
+  comenzar
+    fTotal:=0
+    repetir 3
+      RecibirMensaje(listo,*)
+    Informar(fTotal)
+    BloquearEsquina(50,50) 
+    Pos(50,50)
+    juntarFlores(fTotal)
+    Pos(1,4)
+    LiberarEsquina(50,50)
+    Informar(fTotal)
+  fin
+variables
+  r1,r2,r3:juntador
+  rF:fiscal
+comenzar
+  AsignarArea(r1,av1)
+  AsignarArea(r2,av2)
+  AsignarArea(r3,av3)
+  AsignarArea(rF,rec)
+  AsignarArea(r1,dep)
+  AsignarArea(r2,dep)
+  AsignarArea(r3,dep)
+  AsignarArea(rF,dep)
+  Iniciar(r1,1,1)
+  Iniciar(r2,1,2)
+  Iniciar(r3,1,3)
+  Iniciar(rF,1,4)
+fin  

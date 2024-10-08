@@ -1,0 +1,133 @@
+programa altasHoras
+procesos
+  proceso juntarObjetos(ES f:numero ES p:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso depositarObjetos(ES f:numero ES p:numero)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    repetir f
+      BloquearEsquina(21,21)
+      Pos(21,21)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(21,21)
+    f:=0
+    repetir p
+      BloquearEsquina(22,22)
+      Pos(22,22)
+      depositarPapel
+      Pos(av,ca)
+      LiberarEsquina(22,22)
+    p:=0
+  fin
+  proceso rectangulo(ES flo:numero ES pa:numero E altura:numero E base:numero)
+  variables
+    total,f,p:numero
+  comenzar
+    f:=0
+    p:=0
+    repetir 2
+      repetir altura
+        juntarObjetos(f,p)
+        mover
+      total:=p+f
+      flo:=flo+f
+      pa:=pa+p
+      EnviarMensaje(total,cord)
+      depositarObjetos(f,p)
+      derecha
+      repetir base
+        juntarObjetos(f,p)
+        mover
+      total:=p+f
+      flo:=flo+f
+      pa:=pa+p
+      EnviarMensaje(total,cord)
+      depositarObjetos(f,p)
+      derecha
+  fin
+areas
+  a1:AreaP(1,1,20,20)
+  a2:AreaP(21,1,40,20)
+  aP:AreaPC(22,22,22,22)
+  aF:AreaPC(21,21,21,21)
+  aC:AreaP(23,23,23,23)
+robots
+  robot rect
+  variables
+    id,f,p,base,altura:numero
+    sigo:boolean
+  comenzar
+    f:=0
+    p:=0
+    RecibirMensaje(id,cord)
+    RecibirMensaje(base,cord)
+    RecibirMensaje(altura,cord)
+    rectangulo(f,p,altura,base)
+    RecibirMensaje(sigo,cord)
+    EnviarMensaje(id,cord)
+    EnviarMensaje(f,cord)
+    EnviarMensaje(p,cord)
+  fin
+  robot coordinador
+  variables
+    id,idMaxF,idMaxP,maxP,maxF,f,p,base,altura,obj:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    Random(altura,1,19)
+    Random(base,1,19)
+    EnviarMensaje(base,r1)
+    EnviarMensaje(altura,r1)
+    Random(altura,1,19)
+    Random(base,1,19)
+    EnviarMensaje(base,r2)
+    EnviarMensaje(altura,r2)
+    maxP:=-1
+    maxF:=-1
+    repetir 8
+      RecibirMensaje(obj,*)
+    EnviarMensaje(V,r1)
+    EnviarMensaje(V,r2)
+    repetir 2
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(f,r1)
+        RecibirMensaje(p,r1)
+      sino
+        RecibirMensaje(f,r2)
+        RecibirMensaje(p,r2)
+      si (f>maxF)
+        maxF:=f
+        idMaxF:=id
+      si (p>maxP)
+        maxP:=p
+        idMaxP:=id
+    Informar(idMaxF)
+    Informar(idMaxP)
+  fin
+variables
+  r1,r2:rect
+  cord:coordinador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r1,aF)
+  AsignarArea(r2,aF)
+  AsignarArea(r1,aP)
+  AsignarArea(r2,aP)
+  AsignarArea(cord,aC)
+  Iniciar(r1,1,1)
+  Iniciar(r2,21,1)
+  Iniciar(cord,23,23)
+fin

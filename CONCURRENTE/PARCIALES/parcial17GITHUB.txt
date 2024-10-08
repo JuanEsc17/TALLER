@@ -1,0 +1,102 @@
+programa millionDollarBaby
+procesos
+  proceso juntarPapeles(ES p:numero ES e:numero)
+  comenzar
+    si HayPapelEnLaEsquina
+      e:=e+1
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        p:=p+1
+  fin
+  proceso depositarPapeles(ES p:numero)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    repetir p
+      BloquearEsquina(99,99)
+      Pos(99,99)
+      depositarPapel
+      Pos(av,ca)
+      LiberarEsquina(99,99)
+    p:=0
+  fin
+  proceso escalon(ES p:numero E a:numero E b:numero ES e:numero ES pTotal:numero)
+  comenzar
+    repetir a
+      juntarPapeles(p,e)
+      mover
+    pTotal:=pTotal+p
+    depositarPapeles(p)
+    derecha
+    repetir b
+      juntarPapeles(p,e)
+      mover
+    pTotal:=pTotal+p
+    depositarPapeles(p)
+  fin
+areas
+  ciudad: AreaPC(2,1,85,20)
+  aF:AreaP(1,1,1,1)
+  aDep:AreaC(99,99,99,99)
+robots
+  robot recolector
+  variables
+    a,b,p,e,pTotal:numero
+    sigo:boolean
+  comenzar
+    p:=0
+    e:=0
+    pTotal:=0
+    repetir 4
+      Random(a,1,3)
+      Random(b,2,4)
+      escalon(p,a,b,e,pTotal)
+      EnviarMensaje(e,rF)
+      RecibirMensaje(sigo,rF)
+      repetir 3
+        derecha
+      e:=0
+    Informar(pTotal)
+    EnviarMensaje(pTotal,rF)
+  fin
+  robot fiscalizador
+  variables
+    e,eTotal,p,pTotal:numero
+  comenzar
+    eTotal:=0
+    pTotal:=0
+    repetir 4
+      repetir 3
+        RecibirMensaje(e,*)
+        eTotal:=e+eTotal
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+    repetir 3
+      RecibirMensaje(p,*)
+      pTotal:=p+pTotal
+    Pos(99,99)
+    repetir pTotal
+      tomarPapel
+    Pos(1,1)
+    Informar(eTotal)
+  fin
+variables
+  r1,r2,r3:recolector
+  rF:fiscalizador
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r1,aDep)
+  AsignarArea(r2,aDep)
+  AsignarArea(r3,aDep)
+  AsignarArea(rF,aDep)
+  AsignarArea(rF,aF)
+  Iniciar(rF,1,1)
+  Iniciar(r1,2,1)
+  Iniciar(r2,32,1)
+  Iniciar(r3,62,1)
+fin

@@ -1,0 +1,118 @@
+programa discoEterno
+procesos
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarPapeles(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+areas
+  av2:AreaPC(2,1,2,100)
+  av3:AreaPC(3,1,3,100)
+  ca98:AreaPC(1,98,100,98)
+  ca99:AreaPC(1,99,100,99)
+  areaF:AreaP(1,1,1,1)
+robots
+  robot avenida
+  variables
+    f,id:numero
+  comenzar
+    f:=0
+    id:=PosAv
+    repetir 96
+      juntarFlores(f)
+      mover
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    juntarFlores(f)
+    BloquearEsquina(PosAv,PosCa+1)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    juntarFlores(f)
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    juntarFlores(f) 
+    EnviarMensaje(id,rF)
+    EnviarMensaje(f,rF)
+  fin
+  robot calle
+  variables
+    p,id:numero
+  comenzar
+    p:=0
+    id:=PosCa
+    derecha
+    juntarPapeles(p)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    juntarPapeles(p)
+    BloquearEsquina(PosAv+1,PosCa)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    juntarPapeles(p)
+    mover
+    LiberarEsquina(PosAv-1,PosCa)
+    repetir 96
+      juntarPapeles(p)
+      mover
+    juntarPapeles(p)
+    EnviarMensaje(id,rF)
+    EnviarMensaje(p,rF)
+  fin
+  robot fiscal
+  variables
+    f,p,fTotal,pTotal,id:numero
+  comenzar
+    fTotal:=0
+    pTotal:=0
+    repetir 4
+      RecibirMensaje(id,*)
+      si(id=2)
+        RecibirMensaje(f,a2)
+        fTotal:=fTotal+f
+      sino
+        si(id=3)
+          RecibirMensaje(f,a3)
+          fTotal:=fTotal+f
+        sino
+          si(id=98)
+            RecibirMensaje(p,c98)
+            pTotal:=pTotal+p
+          sino
+            RecibirMensaje(p,c99)
+            pTotal:=pTotal+p
+    si (fTotal>pTotal)
+      Informar(1)
+    sino
+      Informar(2)
+  fin
+variables
+  a2,a3:avenida
+  c98,c99:calle
+  rF:fiscal
+comenzar
+  AsignarArea(a2,av2)
+  AsignarArea(a2,ca98)
+  AsignarArea(a2,ca99)
+  AsignarArea(a3,av3)
+  AsignarArea(a3,ca98)
+  AsignarArea(a3,ca99)
+  AsignarArea(c98,ca98)
+  AsignarArea(c98,av2)
+  AsignarArea(c98,av3)
+  AsignarArea(c99,ca99)
+  AsignarArea(c99,av2)
+  AsignarArea(c99,av3)
+  AsignarArea(rF,areaF)
+  Iniciar(a2,2,1)
+  Iniciar(a3,3,1)
+  Iniciar(c98,1,98)
+  Iniciar(c99,1,99)
+  Iniciar(rF,1,1)
+fin

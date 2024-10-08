@@ -1,0 +1,105 @@
+programa ej1Prac2
+procesos
+  proceso recorrer(ES flores:numero)
+  comenzar
+    flores:=0
+    repetir 9
+      AgarrarFlores(flores)
+      mover
+    AgarrarFlores(flores)
+  fin
+  proceso AgarrarFlores(ES flores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(3,21,3,30)
+  area4:AreaP(4,31,4,40)
+  area5:AreaP(5,41,5,50)
+  area6:AreaP(6,51,6,60)
+  areaJ:AreaP(2,1,2,1)
+robots
+  robot robJuntador
+  variables
+    flores:numero
+    quienSoy:numero
+    informar:numero
+  comenzar
+    RecibirMensaje(quienSoy,robJefe)
+    recorrer(flores)
+    EnviarMensaje(quienSoy,robJefe)
+    EnviarMensaje(flores,robJefe)
+  fin
+  robot robJefe
+  variables
+    quienEs:numero
+    maxFlores:numero
+    auxFlores:numero
+  comenzar
+    EnviarMensaje(1,robJun1)
+    EnviarMensaje(2,robJun2)
+    EnviarMensaje(3,robJun3)
+    EnviarMensaje(4,robJun4)
+    EnviarMensaje(5,robJun5)
+    EnviarMensaje(6,robJun6)
+    maxFlores:=-1
+    repetir 6
+      RecibirMensaje(quienEs,*)
+      si(quienEs=1)
+        RecibirMensaje(auxFlores,robJun1)
+        si(auxFlores>maxFlores)
+          maxFlores:=auxFlores
+      sino
+        si(quienEs=2)
+          RecibirMensaje(auxFlores,robJun2)
+          si(auxFlores>maxFlores)
+            maxFlores:=auxFlores
+        sino
+          si(quienEs=3)
+            RecibirMensaje(auxFlores,robJun3)
+            si(auxFlores>maxFlores)
+              maxFlores:=auxFlores
+          sino
+            si(quienEs=4)
+              RecibirMensaje(auxFlores,robJun4)
+              si(auxFlores>maxFlores)
+                maxFlores:=auxFlores
+            sino
+              si(quienEs=5)
+                RecibirMensaje(auxFlores,robJun5)
+                si(auxFlores>maxFlores
+                  maxFlores:=auxFlores
+              sino
+                RecibirMensaje(auxFlores,robJun6)
+                si(auxFlores>maxFlores)
+                  maxFlores:=auxFlores
+    Informar(maxFlores)      
+  fin  
+variables
+  robJun1:robJuntador
+  robJun2:robJuntador
+  robJun3:robJuntador
+  robJun4:robJuntador
+  robJun5:robJuntador
+  robJun6:robJuntador
+  robJefe:robJefe
+comenzar
+  AsignarArea(robJun1,area1)
+  AsignarArea(robJun2,area2)
+  AsignarArea(robJun3,area3)
+  AsignarArea(robJun4,area4)
+  AsignarArea(robJun5,area5)
+  AsignarArea(robJun6,area6)
+  AsignarArea(robJefe,areaJ)
+  Iniciar(robJun1,1,1)
+  Iniciar(robJun2,2,11)
+  Iniciar(robJun3,3,21)
+  Iniciar(robJun4,4,31)
+  Iniciar(robJun5,5,41)
+  Iniciar(robJun6,6,51)
+  Iniciar(robJefe,2,1)
+fin

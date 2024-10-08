@@ -1,0 +1,151 @@
+programa buenosTiempos
+procesos 
+  proceso juntarObjetos(ES p:numero ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  proceso rectanguloHori(ES p:numero ES f:numero)
+  comenzar
+    derecha
+    repetir 4
+      juntarObjetos(p,f)
+      BloquearEsquina(PosAv+1,PosCa)
+      mover
+      juntarObjetos(p,f)
+      mover
+      LiberarEsquina(PosAv-1,PosCa)
+    repetir 3
+      derecha
+    repetir 2
+      juntarObjetos(p,f)
+      mover
+    repetir 3
+      derecha
+    repetir 4
+      juntarObjetos(p,f)
+      BloquearEsquina(PosAv-1,PosCa)
+      mover
+      juntarObjetos(p,f)
+      mover
+      LiberarEsquina(PosAv+1,PosCa)
+    repetir 3
+      derecha
+    repetir 2
+      juntarObjetos(p,f)
+      mover
+  fin
+  proceso rectanguloVert(ES p:numero ES f:numero)
+  comenzar
+    repetir 4
+      juntarObjetos(p,f)
+      BloquearEsquina(PosAv,PosCa+1)
+      mover
+      juntarObjetos(p,f)
+      mover
+      LiberarEsquina(PosAv,PosCa-1)
+    derecha
+    repetir 2
+      juntarObjetos(p,f)
+      mover
+    derecha
+    repetir 4
+      juntarObjetos(p,f)
+      BloquearEsquina(PosAv,PosCa-1)
+      mover
+      juntarObjetos(p,f)
+      mover
+      LiberarEsquina(PosAv,PosCa+1)
+    derecha
+    repetir 2
+      juntarObjetos(p,f)
+      mover
+  fin
+areas
+  area:AreaPC(1,1,9,9)
+  a1:AreaP(20,1,20,1)
+  a2:AreaP(20,2,20,2)
+  a3:AreaP(20,4,20,4)
+  a4:AreaP(20,5,20,5)
+  aj:AreaP(20,15,20,15)
+robots
+  robot rectangulo
+  variables
+    p,f,id:numero
+  comenzar
+    p:=0
+    f:=0
+    RecibirMensaje(id,jefe)
+    si ((id=1)|(id=2))
+      si id=1
+        Pos(1,2)
+      sino
+        Pos(1,6)
+      rectanguloHori(p,f)
+    sino
+      si id=3
+        Pos(2,1)
+      sino
+        Pos(6,1)
+      rectanguloVert(p,f)
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(p,jefe)
+    EnviarMensaje(f,jefe)
+  fin
+  robot robJefe
+  variables
+    id,p,f,totalF,totalP:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    totalF:=0
+    totalP:=0
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(p,r1)
+        RecibirMensaje(f,r1)
+      sino
+        si id=2
+          RecibirMensaje(p,r2)
+          RecibirMensaje(f,r2)
+        sino
+          si id=3
+            RecibirMensaje(p,r3)
+            RecibirMensaje(f,r3)
+          sino
+            RecibirMensaje(p,r4)
+            RecibirMensaje(f,r4)
+      totalF:=totalF+f
+      totalP:=totalP+p
+    Informar(totalP)
+    Informar(totalF)
+  fin
+variables
+  r1,r2,r3,r4:rectangulo
+  jefe:robJefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,a4)
+  AsignarArea(jefe,aj)
+  AsignarArea(r1,area)
+  AsignarArea(r2,area)
+  AsignarArea(r3,area)
+  AsignarArea(r4,area)
+  Iniciar(r1,20,1)
+  Iniciar(r2,20,2)
+  Iniciar(r3,20,4)
+  Iniciar(r4,20,5)
+  Iniciar(jefe,20,15)
+fin
+  
+  
+  

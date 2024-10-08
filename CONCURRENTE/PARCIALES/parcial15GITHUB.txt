@@ -1,0 +1,93 @@
+programa remedio
+procesos
+  proceso buscarEsquina(ES f:numero E a:numero E c:numero)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(a,c)
+    Pos(a,c)
+    juntarFlores(f)
+    Pos(av,ca)
+    LiberarEsquina(a,c)
+  fin
+  proceso juntarFlores(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:=f+1
+  fin
+areas
+  cuad: AreaPC(10,10,30,30)
+  a1:AreaP(1,1,1,1)
+  a2:AreaP(2,1,2,1)
+  a3:AreaP(3,1,3,1)
+  f:AreaP(9,9,9,9)
+robots
+  robot cuadrante
+  variables
+    f,av,ca,n,id:numero
+  comenzar
+    id:=PosAv
+    Random(n,2,5)
+    f:=0
+    repetir n  
+      EnviarMensaje(id,fisc)
+      EnviarMensaje(V,fisc) 
+      RecibirMensaje(av,fisc)
+      Informar(id)
+      RecibirMensaje(ca,fisc)      
+      buscarEsquina(f,av,ca)
+    EnviarMensaje(id,fisc)
+    EnviarMensaje(F,fisc)
+  fin
+  robot fiscalizador
+  variables
+    cont,av,ca,int,id:numero
+    tuki:boolean
+  comenzar
+    int:=0
+    cont:=0
+    mientras cont<3
+      Random(av,10,30)
+      Random(ca,10,30)
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(tuki,r1)
+        si tuki=V
+          EnviarMensaje(av,r1)
+          EnviarMensaje(ca,r1)
+        sino
+          si id=2
+            RecibirMensaje(tuki,r2)
+            si tuki=V
+              EnviarMensaje(av,r2)
+              EnviarMensaje(ca,r2)
+          sino
+            RecibirMensaje(tuki,r3)
+            si tuki=V
+              EnviarMensaje(av,r3)
+              EnviarMensaje(ca,r3)
+      si tuki=V
+        int:=int+1
+      sino
+        cont:=cont+1
+    Informar(int)
+  fin
+variables
+  r1,r2,r3:cuadrante
+  fisc:fiscalizador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(fisc,f)
+  AsignarArea(r1,cuad)
+  AsignarArea(r2,cuad)
+  AsignarArea(r3,cuad)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(fisc,9,9)
+fin
